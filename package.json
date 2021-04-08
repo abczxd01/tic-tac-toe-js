@@ -1,0 +1,30 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "parcel serve ./src/index.pug",
+    "build": "parcel build ./src/index.pug",
+    "lint":"eslint ./src",
+    "lint:fix":"eslint ./src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abczxd01/tic-tac-toe-js.git"
+  },
+  "author": "abczxd01",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/abczxd01/tic-tac-toe-js/issues"
+  },
+  "homepage": "https://github.com/abczxd01/tic-tac-toe-js#readme",
+  "devDependencies": {
+    "@parcel/transformer-pug": "^2.0.0-beta.2",
+    "@parcel/transformer-sass": "^2.0.0-beta.2",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "parcel": "^2.0.0-beta.2"
+  }
+}

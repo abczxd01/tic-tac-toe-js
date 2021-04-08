@@ -1,0 +1,8 @@
+node_modules
+dist
+server
+/.vscode
+.vscode
+/.git
+postcss.config.js
+.parcel-cache
