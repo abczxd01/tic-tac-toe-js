@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": "true",
+  "type": "module",
+  "scripts": {
+    "server": "nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "abczxd01",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
