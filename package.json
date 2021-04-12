@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "parcel serve ./src/index.pug",
     "build": "parcel build ./src/index.pug",
-    "lint":"eslint ./src",
-    "lint:fix":"eslint ./src --fix"
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,7 @@
     "eslint-plugin-import": "^2.22.1",
     "parcel": "^2.0.0-beta.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "brain.js": "^2.0.0-beta.2"
+  }
 }
