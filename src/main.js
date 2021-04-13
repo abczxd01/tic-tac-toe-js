@@ -1,42 +1,85 @@
-const canvasAll = document.querySelectorAll('.grid__canvas');
-const canvasAllCtx = [];
+import { NeuralNetwork, likely } from 'brain.js';
+import CanvasCell from './CanvasCell';
 
-for (let i = 0; i < canvasAll.length; i++) {
-  canvasAllCtx.push(canvasAll[i].getContext('2d'));
-  canvasAll[i].height = canvasAll[i].clientHeight;
-  canvasAll[i].width = canvasAll[i].clientWidth;
+async function getTrainData() {
+  const res = await fetch('http://127.0.0.1:8000/trainData');
+  return res.json(res);
 }
+
+const net = new NeuralNetwork();
+
+async function trainNet() {
+  const trainData = await getTrainData();
+  net.train(trainData, { log: true });
+}
+trainNet();
+const canvasAll = document.querySelectorAll('.grid__canvas');
+const CanvasCells = [];
+
+function completeCanvasCells(element) {
+  CanvasCells.push(new CanvasCell(element));
+}
+
+function addSizeCanvasCells(element) {
+  element.height = 215;
+  element.width = 215;
+}
+
+canvasAll.forEach((element, index) => {
+  completeCanvasCells(element);
+  addSizeCanvasCells(element, index);
+});
 
 let isMouseDown;
 let curTarget;
-const pixel = 12;
 
-for (let index = 0; index < canvasAllCtx.length; index++) {
-  canvasAll[index].addEventListener('mousedown', (event) => {
+class HandlersForDraw {
+  startDraw(event, canvasCtx) {
     isMouseDown = true;
-    canvasAllCtx[index].beginPath();
+    canvasCtx.beginPath();
     curTarget = event.target;
-  });
+  }
 
-  canvasAll[index].addEventListener('mousemove', (event) => {
+  continuebDraw(event, canvasCtx, canvasCell) {
     if (isMouseDown) {
       if (curTarget !== event.target) {
-        canvasAllCtx[index].closePath();
+        canvasCtx.closePath();
       } else {
-        canvasAllCtx[index].lineWidth = pixel;
-        canvasAllCtx[index].fillStyle = 'red';
-        canvasAllCtx[index].strokeStyle = 'red';
-        canvasAllCtx[index].lineTo(event.offsetX, event.offsetY);
-        canvasAllCtx[index].stroke();
+        canvasCtx.lineWidth = canvasCell.pixelSize;
+        canvasCtx.fillStyle = 'red';
+        canvasCtx.strokeStyle = 'red';
+        canvasCtx.lineTo(event.offsetX, event.offsetY);
+        canvasCtx.stroke();
 
-        canvasAllCtx[index].beginPath();
-        canvasAllCtx[index].arc(event.offsetX, event.offsetY, pixel / 2, 0, Math.PI * 2);
-        canvasAllCtx[index].fill();
+        canvasCtx.beginPath();
+        canvasCtx.arc(event.offsetX, event.offsetY, canvasCell.pixelSize / 2, 0, Math.PI * 2);
+        canvasCtx.fill();
 
-        canvasAllCtx[index].beginPath();
-        canvasAllCtx[index].moveTo(event.offsetX, event.offsetY);
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(event.offsetX, event.offsetY);
       }
     }
-  });
-  canvasAll[index].addEventListener('mouseup', () => { isMouseDown = false; });
+  }
+
+  endDraw() {
+    isMouseDown = false;
+  }
 }
+const handlersForDraw = new HandlersForDraw();
+
+CanvasCells.forEach((value) => {
+  value.element.addEventListener('mousedown', (event) => {
+    handlersForDraw.startDraw(event, value.ctx);
+  });
+  value.element.addEventListener('mousemove', (event) => {
+    handlersForDraw.continuebDraw(event, value.ctx, value);
+  });
+  value.element.addEventListener('mouseup', (event) => {
+    handlersForDraw.endDraw(event, value.ctx);
+    setTimeout(() => {
+      const resultDetection = likely(value.calculate(), net);
+      console.log(resultDetection);
+      value.clear();
+    }, 2000);
+  });
+});
