@@ -1,19 +1,11 @@
-import { NeuralNetwork, likely } from 'brain.js';
+import objectDetection from './ObjectDetection';
+import handlersForDraw from './HandlersForDraw';
 import CanvasCell from './CanvasCell';
 
-async function getTrainData() {
-  const res = await fetch('http://127.0.0.1:8000/trainData');
-  return res.json(res);
-}
+objectDetection.trainNet();
 
-const net = new NeuralNetwork();
-
-async function trainNet() {
-  const trainData = await getTrainData();
-  net.train(trainData, { log: true });
-}
-trainNet();
-const canvasAll = document.querySelectorAll('.grid__canvas');
+const gridGame = document.querySelector('.grid-game');
+const canvases = document.querySelectorAll('.grid-game__canvas');
 const CanvasCells = [];
 
 function completeCanvasCells(element) {
@@ -25,61 +17,28 @@ function addSizeCanvasCells(element) {
   element.width = 215;
 }
 
-canvasAll.forEach((element, index) => {
+canvases.forEach((element, index) => {
   completeCanvasCells(element);
   addSizeCanvasCells(element, index);
 });
 
-let isMouseDown;
-let curTarget;
+gridGame.addEventListener('mousedown', (event) => {
+  if (event.target.tagName !== 'CANVAS') return false;
+  handlersForDraw.startDraw(event, CanvasCells[event.target.id].ctx);
+});
 
-class HandlersForDraw {
-  startDraw(event, canvasCtx) {
-    isMouseDown = true;
-    canvasCtx.beginPath();
-    curTarget = event.target;
-  }
+gridGame.addEventListener('mousemove', (event) => {
+  if (event.target.tagName !== 'CANVAS') return false;
+  handlersForDraw.continuebDraw(
+    event, CanvasCells[event.target.id].ctx, CanvasCells[event.target.id],
+  );
+});
 
-  continuebDraw(event, canvasCtx, canvasCell) {
-    if (isMouseDown) {
-      if (curTarget !== event.target) {
-        canvasCtx.closePath();
-      } else {
-        canvasCtx.lineWidth = canvasCell.pixelSize;
-        canvasCtx.fillStyle = 'red';
-        canvasCtx.strokeStyle = 'red';
-        canvasCtx.lineTo(event.offsetX, event.offsetY);
-        canvasCtx.stroke();
-
-        canvasCtx.beginPath();
-        canvasCtx.arc(event.offsetX, event.offsetY, canvasCell.pixelSize / 2, 0, Math.PI * 2);
-        canvasCtx.fill();
-
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(event.offsetX, event.offsetY);
-      }
-    }
-  }
-
-  endDraw() {
-    isMouseDown = false;
-  }
-}
-const handlersForDraw = new HandlersForDraw();
-
-CanvasCells.forEach((value) => {
-  value.element.addEventListener('mousedown', (event) => {
-    handlersForDraw.startDraw(event, value.ctx);
-  });
-  value.element.addEventListener('mousemove', (event) => {
-    handlersForDraw.continuebDraw(event, value.ctx, value);
-  });
-  value.element.addEventListener('mouseup', (event) => {
-    handlersForDraw.endDraw(event, value.ctx);
-    setTimeout(() => {
-      const resultDetection = likely(value.calculate(), net);
-      console.log(resultDetection);
-      value.clear();
-    }, 2000);
-  });
+gridGame.addEventListener('mouseup', (event) => {
+  if (event.target.tagName !== 'CANVAS') return false;
+  handlersForDraw.endDraw(event, CanvasCells[event.target.id].ctx);
+  setTimeout(() => {
+    objectDetection.findObject(CanvasCells[event.target.id]);
+    CanvasCells[event.target.id].clear();
+  }, 2000);
 });
