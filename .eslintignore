@@ -5,4 +5,4 @@ server
 .vscode
 /.git
 postcss.config.js
-.parcel-cache
+webpack.config.js
