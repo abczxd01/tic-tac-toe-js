@@ -1,3 +1,5 @@
+import './style.scss';
+
 import objectDetection from './ObjectDetection';
 import handlersForDraw from './HandlersForDraw';
 import CanvasCell from './CanvasCell';

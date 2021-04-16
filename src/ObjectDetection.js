@@ -1,12 +1,10 @@
-import { NeuralNetwork, likely } from 'brain.js';
-
 class ObjectDetection {
   constructor() {
-    this.net = new NeuralNetwork();
+    this.net = new brain.NeuralNetwork();
   }
 
   async getTrainData() {
-    const res = await fetch('http://127.0.0.1:8000/trainData');
+    const res = await fetch('http://localhost:8000/trainData');
     return res.json(res);
   }
 
@@ -16,7 +14,7 @@ class ObjectDetection {
   }
 
   async findObject(canvasCell) {
-    const result = likely(canvasCell.calculate(), this.net);
+    const result = brain.likely(canvasCell.calculate(), this.net);
     console.log(result);
   }
 }
