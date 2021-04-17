@@ -4,6 +4,7 @@ const fs = require('fs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -75,6 +76,9 @@ if (isDev) {
             ]
         },
         plugins: [
+            new Dotenv({
+                path: './.envDev', 
+            }),
             ...PAGES.map(page => new HtmlWebpackPlugin({
                 template: `${PAGES_DIR}/${page}`,
                 filename: `./${page.replace(/\.pug/, '.html')}`
@@ -162,6 +166,9 @@ if (isDev) {
             },
         },
         plugins: [
+            new Dotenv({
+                path: './.envProd', 
+            }),
             new MiniCssExtractPlugin({
                 filename: '[name].[contenthash].css',
                 chunkFilename: '[id].[contenthash].css',

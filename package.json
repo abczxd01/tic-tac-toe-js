@@ -4,11 +4,11 @@
   "description": "",
   "main": "main.js",
   "browserslist": [
-    "> 1%",
-    "last 3 version"
+    "last 2 Chrome versions",
+    "last 2 firefox versions"
   ],
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --mode development",
+    "dev": "cross-env NODE_ENV=development  webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
     "start": "cross-env NODE_ENV=development webpack serve",
@@ -36,6 +36,7 @@
     "css-loader": "^5.2.1",
     "css-mqpacker": "^7.0.0",
     "cssnano": "^5.0.1",
+    "dotenv-webpack": "^7.0.2",
     "eslint": "^7.23.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",

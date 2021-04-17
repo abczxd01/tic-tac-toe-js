@@ -4,8 +4,13 @@ class ObjectDetection {
   }
 
   async getTrainData() {
-    const res = await fetch('http://localhost:8000/trainData');
-    return res.json(res);
+    try {
+      const res = await fetch(process.env.SERVER_URL+'/trainData');
+      return res.json(res);
+    } catch (error) {
+      console.log(`Ошибка связанная с сервером:${error}`);
+      return error;
+    }
   }
 
   async trainNet() {
