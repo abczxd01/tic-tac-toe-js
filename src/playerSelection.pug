@@ -5,7 +5,9 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title tic-tac-toe-js
-  body
+  body.body__blur
+    .grid-game__player-selection
+      p.grid-game__player-selection__title Select cross or circle
     .grid-game__score
       p.grid-game__score-value 0:0
     .grid-game
@@ -26,5 +28,4 @@ html(lang="en")
       .grid-game__box
         canvas.grid-game__canvas(id="7") 
       .grid-game__box
-        canvas.grid-game__canvas(id="8") 
-    script(src="https://unpkg.com/brain.js@2.0.0-beta.2/dist/brain-browser.min.js")
+        canvas.grid-game__canvas(id="8")

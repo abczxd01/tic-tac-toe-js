@@ -5,7 +5,7 @@ class ObjectDetection {
 
   async getTrainData() {
     try {
-      const res = await fetch(process.env.SERVER_URL+'/trainData');
+      const res = await fetch(`${process.env.SERVER_URL}/trainData`);
       return res.json(res);
     } catch (error) {
       console.log(`Ошибка связанная с сервером:${error}`);
