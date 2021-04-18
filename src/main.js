@@ -1,9 +1,11 @@
 import './style.scss';
 
+import showModal from './modalWindow';
 import objectDetection from './ObjectDetection';
 import handlersForDraw from './HandlersForDraw';
 import CanvasCell from './CanvasCell';
 
+showModal();
 objectDetection.trainNet();
 
 const gridGame = document.querySelector('.grid-game');
